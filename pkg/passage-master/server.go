@@ -12,7 +12,7 @@ type MasterServer struct
 	HttpServerPort 	int
 }
 
-func (m *MasterServer) StartHttpServer () (int, error) {
+func (m *MasterServer) StartHttpServer () (bool, error) {
 	/*
 	Begins http server setup. This is used to service application requests via http api calls.
 
@@ -25,7 +25,8 @@ func (m *MasterServer) StartHttpServer () (int, error) {
 	glog.Infof(fmt.Sprintf("Initializing master http server at %s:%d", m.HttpServerUrl, m.HttpServerPort))
 	mux := DispatchApiHandler()
 	err := http.ListenAndServe(fmt.Sprintf("%s:%d", m.HttpServerUrl, m.HttpServerPort), mux); if err != nil {
-		return http.StatusNotFound, err
+		glog.Fatal(err)
+		return false, err
 	}
-	return http.StatusAccepted, nil
+	return true, nil
 }
