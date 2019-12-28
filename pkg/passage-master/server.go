@@ -1,19 +1,31 @@
 package passage_master
 
+import (
+	"fmt"
+	"github.com/golang/glog"
+	"net/http"
+)
+
 type MasterServer struct
 {
-	httpServerPort int
+	HttpServerUrl 	string
+	HttpServerPort 	int
 }
 
-func (m *MasterServer) startHttpServer () (int, error) {
+func (m *MasterServer) StartHttpServer () (int, error) {
 	/*
-	Begins http server setup.
-	This is used to service application requests via http api calls.
+	Begins http server setup. This is used to service application requests via http api calls.
 
 	Params
-		nil
+		- nil
 	Returns
-		int: Http status code
-		error: Error when initializing server
+		- int: 		Http status code
+		- error: 	Error when initializing server
 	*/
+	glog.Infof(fmt.Sprintf("Initializing master http server at %s:%d", m.HttpServerUrl, m.HttpServerPort))
+	mux := DispatchApiHandler()
+	err := http.ListenAndServe(fmt.Sprintf("%s:%d", m.HttpServerUrl, m.HttpServerPort), mux); if err != nil {
+		return http.StatusNotFound, err
+	}
+	return http.StatusAccepted, nil
 }
