@@ -1,0 +1,17 @@
+syntax = "proto3";
+package master;
+
+import "google/protobuf/empty.proto";
+
+message HelloWorldResponse {
+    string resp = 1;
+}
+
+message HeartbeatResponse {
+    bool resp = 1;
+}
+
+service MasterServices {
+    rpc HelloWorld(google.protobuf.Empty) returns (HelloWorldResponse);
+    rpc Heartbeat(google.protobuf.Empty) returns (HeartbeatResponse);
+}
