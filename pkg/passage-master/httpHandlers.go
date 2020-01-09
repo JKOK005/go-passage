@@ -22,7 +22,7 @@ func httpHeartbeatHandler() http.Handler {
 	return http.HandlerFunc(fn)
 }
 
-func DispatchApiHandler() *http.ServeMux {
+func DispatchHttpApiHandler() *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.Handle("/helloworld", httpHelloWorldHandler())
 	mux.Handle("/heartbeat", httpHeartbeatHandler())
