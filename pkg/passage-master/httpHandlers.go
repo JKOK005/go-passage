@@ -4,12 +4,15 @@ package passage_master
 Http handler registration module
 */
 
-import "net/http"
+import (
+	"net/http"
+	"strconv"
+)
 
 func httpHelloWorldHandler() http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		resp := helloWorldHandler()
-		w.Write(resp)
+		w.Write([]byte(resp))
 	}
 	return http.HandlerFunc(fn)
 }
@@ -17,7 +20,7 @@ func httpHelloWorldHandler() http.Handler {
 func httpHeartbeatHandler() http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		resp := heartbeatHandler()
-		w.Write(resp)
+		w.Write([]byte(strconv.FormatBool(resp)))
 	}
 	return http.HandlerFunc(fn)
 }
