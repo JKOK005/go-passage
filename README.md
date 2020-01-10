@@ -9,3 +9,8 @@ Compile and generate Protobuf libraries for master
 ```proto
 protoc -I api/protobuf-spec/proto/master --go_out=plugins=grpc:api/protobuf-spec/bin/master/ api/protobuf-spec/proto/master/*.proto
 ```
+
+## Executing the code:
+```go
+go run main.go --stderrthreshold=INFO
+```
