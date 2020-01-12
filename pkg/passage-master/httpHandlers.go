@@ -11,7 +11,7 @@ import (
 
 func httpHelloWorldHandler() http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
-		resp := helloWorldHandler()
+		resp := "Hello world"
 		w.Write([]byte(resp))
 	}
 	return http.HandlerFunc(fn)
@@ -19,7 +19,7 @@ func httpHelloWorldHandler() http.Handler {
 
 func httpHeartbeatHandler() http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
-		resp := heartbeatHandler()
+		resp := true
 		w.Write([]byte(strconv.FormatBool(resp)))
 	}
 	return http.HandlerFunc(fn)
