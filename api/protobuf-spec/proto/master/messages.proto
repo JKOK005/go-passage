@@ -11,7 +11,47 @@ message HeartbeatResponse {
     bool resp = 1;
 }
 
+message AddServerRequest {
+    string exposedUrl = 1;
+    uint32 exposedPort = 2;
+}
+
+message AddServerResponse {
+    bool resp = 1;
+    uint32 serverID = 2; // Unique identifier for server after successful registration
+}
+
+message RemoveServerRequest {
+    uint32 serverID = 1;
+}
+
+message RemoveServerResponse {
+    bool resp = 1;
+}
+
+message AddAppRequest {
+    uint32 serverID = 1;
+    string appName = 2;  // Constraint to unique (serverID, appName) pair
+}
+
+message AddAppResponse {
+    bool resp = 1;
+}
+
+message RemoveAppRequest {
+    uint32 serverID = 1;
+    string appName = 2;
+}
+
+message RemoveAppResponse {
+    bool resp = 1;
+}
+
 service MasterServices {
     rpc HelloWorld(google.protobuf.Empty) returns (HelloWorldResponse);
     rpc Heartbeat(google.protobuf.Empty) returns (HeartbeatResponse);
+    rpc AddServer(AddServerRequest) returns (AddServerResponse);
+    rpc RemoveServer(RemoveServerRequest) returns (RemoveServerResponse);
+    rpc AddApplication(AddAppRequest) returns (AddAppResponse);
+    rpc RemoveApplication(RemoveAppRequest) returns (RemoveAppResponse);
 }
