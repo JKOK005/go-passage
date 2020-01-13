@@ -47,6 +47,19 @@ message RemoveAppResponse {
     bool resp = 1;
 }
 
+message GetAppRequest {
+    string appName = 1;
+}
+
+message GetAppResponse {
+    message AppAddr {
+        string appName = 1;
+        string serverUrl = 2;
+        uint32 serverPort = 3;
+    }
+    repeated AppAddr appAddr = 1;
+}
+
 service MasterServices {
     rpc HelloWorld(google.protobuf.Empty) returns (HelloWorldResponse);
     rpc Heartbeat(google.protobuf.Empty) returns (HeartbeatResponse);
@@ -55,3 +68,6 @@ service MasterServices {
     rpc AddApplication(AddAppRequest) returns (AddAppResponse);
     rpc RemoveApplication(RemoveAppRequest) returns (RemoveAppResponse);
 }
+
+service ServerServices {}
+service ClientServices {}

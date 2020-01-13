@@ -76,7 +76,19 @@ func (g *grpcClient) RemoveApplication(ctx context.Context, request *pb.RemoveAp
 	return nil,nil
 }
 
-func (g *grpcClient) CheckServeIsAlive() {}
+func (g *grpcClient) CheckServeIsAlive(ctx context.Context, empty *empty.Empty) (*pb.HeartbeatResponse, error) {
+	/*
+		Asserts liveliness check by pinging server
+
+		Params
+			- nil
+		Returns
+			- pb.HeartbeatResponse: proto heartbeat response from pinged server
+			- error: Error when attempting to ping server
+	*/
+	return nil,nil
+}
+
 func (g *grpcClient) GetAppAddress() {}
 
 func DispatchGrpcApiHandler() *grpc.Server {
