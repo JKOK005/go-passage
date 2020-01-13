@@ -2,8 +2,8 @@ package main
 
 import (
 	"flag"
+	"go-passage/pkg/passage-master/server"
 	"sync"
-	pm "go-passage/pkg/passage-master"
 )
 
 func main () {
@@ -16,7 +16,7 @@ func main () {
 		/*
 			Start http server
 		*/
-		srv := pm.MasterServer{
+		srv := server.MasterServer{
 			HttpServerUrl:  "localhost",
 			HttpServerPort: 9000,
 		}
@@ -27,7 +27,7 @@ func main () {
 		/*
 			Start gRPC server
 		*/
-		srv := pm.MasterServer{
+		srv := server.MasterServer{
 			GrpcServerUrl:  "localhost",
 			GrpcServerPort: 9001,
 		}

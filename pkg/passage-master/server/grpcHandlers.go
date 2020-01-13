@@ -1,4 +1,4 @@
-package passage_master
+package server
 
 import (
 	"github.com/golang/protobuf/ptypes/empty"

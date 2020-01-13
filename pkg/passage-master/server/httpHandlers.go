@@ -1,4 +1,4 @@
-package passage_master
+package server
 
 /*
 Http handler registration module
