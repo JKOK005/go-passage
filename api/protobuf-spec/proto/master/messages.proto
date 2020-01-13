@@ -53,9 +53,9 @@ message GetAppRequest {
 
 message GetAppResponse {
     message AppAddr {
-        string appName = 1;
-        string serverUrl = 2;
-        uint32 serverPort = 3;
+        string appName = 2;
+        string serverUrl = 3;
+        uint32 serverPort = 4;
     }
     repeated AppAddr appAddr = 1;
 }
@@ -67,6 +67,8 @@ service MasterServices {
     rpc RemoveServer(RemoveServerRequest) returns (RemoveServerResponse);
     rpc AddApplication(AddAppRequest) returns (AddAppResponse);
     rpc RemoveApplication(RemoveAppRequest) returns (RemoveAppResponse);
+    rpc CheckServeIsAlive(google.protobuf.Empty) returns (HeartbeatResponse);
+    rpc GetAppAddress(GetAppRequest) returns (GetAppResponse);
 }
 
 service ServerServices {}

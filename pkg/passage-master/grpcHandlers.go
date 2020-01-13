@@ -89,7 +89,19 @@ func (g *grpcClient) CheckServeIsAlive(ctx context.Context, empty *empty.Empty) 
 	return nil,nil
 }
 
-func (g *grpcClient) GetAppAddress() {}
+func (g *grpcClient) GetAppAddress(ctx context.Context, request *pb.GetAppRequest) (*pb.GetAppResponse, error) {
+	/*
+		Returns address of the application present within each server, if the application does exist.
+		Else, we return an empty response
+
+		Params
+			- request: Get Application address request
+		Returns
+			- pb.GetAppResponse: If application exists, return the message type GetAppResponse, else return nothing
+			- error: Error when attempting to retrieve application
+	*/
+	return nil,nil
+}
 
 func DispatchGrpcApiHandler() *grpc.Server {
 	grpcServer := grpc.NewServer()
