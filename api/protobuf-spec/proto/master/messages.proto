@@ -36,11 +36,11 @@ message AddAppRequest {
 
 message AddAppResponse {
     bool resp = 1;
+    uint32 appID = 2;
 }
 
 message RemoveAppRequest {
-    uint32 serverID = 1;
-    string appName = 2;
+    uint32 appID = 1;
 }
 
 message RemoveAppResponse {
