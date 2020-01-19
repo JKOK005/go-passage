@@ -1,7 +1,7 @@
 package server
 
 /*
-Http handler registration module
+Http handlers registration module
 */
 
 import (
