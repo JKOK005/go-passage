@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"encoding/json"
 	"github.com/jinzhu/gorm"
 )
 
@@ -14,12 +15,23 @@ func (s ServerModel) TableName() string {
 	return "server_model"
 }
 
+func (s ServerModel) ToString() string {
+	str, _ := json.Marshal(s)
+	return string(str)
+}
+
 type AppModel struct {
 	gorm.Model
 	Name string `gorm:"type:varchar(20); NOT NULL; unique_index:indx"`
-	Server ServerModel `gorm:"foreignkey:ID"`
+	Server ServerModel `gorm:"foreignkey:ServerModelID"`
+	ServerID uint
 }
 
 func (a AppModel) TableName() string {
 	return "app_model"
+}
+
+func (a AppModel) ToString() string {
+	str, _ := json.Marshal(a)
+	return string(str)
 }
