@@ -98,14 +98,13 @@ func (m *MysqlDAO) GetApps(pred map[string]string) ([]*schema.AppModel, error) {
 	}
 }
 
-func (m *MysqlDAO) GetDeployedServers(aModel *schema.AppModel) ([]*schema.ServerModel, error) {
-	glog.Info(fmt.Sprintf("Finding all deployments of app: %s", aModel.ToString()))
+func (m *MysqlDAO) GetDeployedServers(aModel []*schema.AppModel) ([]*schema.ServerModel, error) {
+	glog.Info(fmt.Sprintf("Finding all deployments of apps"))
 	db, err := m.openConn(); if err != nil {
 		return nil, err
 	} else {
 		srvModel := make([]*schema.ServerModel, 1)
-		apps, _ := m.GetApps(map[string]string{"id" : string(aModel.ID)})
-		for indx, eachApp := range apps {
+		for indx, eachApp := range aModel {
 			if indx == 0 {
 				db = db.Where(fmt.Sprintf("%s = '%d'", "id", eachApp.DeployedServerUid))
 			} else {
