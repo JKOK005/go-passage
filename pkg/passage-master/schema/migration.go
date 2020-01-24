@@ -13,8 +13,13 @@ func StartMigration() {
 	if err != nil {panic(err)}
 	defer db.Close()
 
+	// Separate migration of schemas done due to the need to create a foreign key for AppModel
+	// Issue tracked at: https://github.com/jinzhu/gorm/issues/450
 	db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(
 		&ServerModel{},
-		&AppModel{},
 	)
+
+	db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(
+		&AppModel{},
+	).AddForeignKey("deployed_server_uid", "server_model(id)", "CASCADE", "RESTRICT")
 }
