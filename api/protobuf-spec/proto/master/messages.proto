@@ -36,7 +36,6 @@ message AddAppRequest {
 
 message AddAppResponse {
     bool resp = 1;
-    uint32 appID = 2;
 }
 
 message RemoveAppRequest {
