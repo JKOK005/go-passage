@@ -1,11 +1,13 @@
 package dao
 
+import "go-passage/pkg/passage-master/schema"
+
 type DAOInterface interface {
-	InsertServer(serverUrl string, serverPort uint32) error
-	GetServer(serverUrl string, serverPort uint32) (uint32, error)
-	DeleteServer(serverID uint32)
-	InsertApp(serverID uint32, appName string) error
-	GetApp(serverID uint32, appName string) (uint32, error)
-	GetApps(appName string) ([]ServerTbl, error)
-	DeleteApp(appID uint32) error
+	CreateServer(sModel *schema.ServerModel) error
+	GetServer(pred map[string]string) (*schema.ServerModel, error)
+	DeleteServer(sModel *schema.ServerModel) error
+	CreateApp(aModel *schema.AppModel) error
+	GetApp(pred map[string]string) (*schema.AppModel, error)
+	GetApps(pred map[string]string) ([]*schema.AppModel, error)
+	DeleteApp(aModel *schema.AppModel) error
 }
