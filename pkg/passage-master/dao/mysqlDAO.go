@@ -16,11 +16,11 @@ type MysqlDAO struct {
 	password string
 }
 
-func (m *MysqlDAO) openConn() (*gorm.DB, error) {
+func (m MysqlDAO) openConn() (*gorm.DB, error) {
 	return gorm.Open("mysql", "passage:passage@(localhost)/Passage_master?charset=utf8&parseTime=True&loc=Local")
 }
 
-func (m *MysqlDAO) CreateServer(sModel *schema.ServerModel) error {
+func (m MysqlDAO) CreateServer(sModel *schema.ServerModel) error {
 	glog.Info(fmt.Sprintf("Inserting new server: %s", sModel.ToString()))
 	db, err := m.openConn(); if err != nil {
 		return err
@@ -30,7 +30,7 @@ func (m *MysqlDAO) CreateServer(sModel *schema.ServerModel) error {
 	}
 }
 
-func (m *MysqlDAO) GetServer(pred map[string]string) (*schema.ServerModel, error) {
+func (m MysqlDAO) GetServer(pred map[string]string) (*schema.ServerModel, error) {
 	glog.Info(fmt.Sprintf("Fetching server information based on predicates: %s", pred))
 	db, err := m.openConn(); if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (m *MysqlDAO) GetServer(pred map[string]string) (*schema.ServerModel, error
 	}
 }
 
-func (m *MysqlDAO) DeleteServer(sModel *schema.ServerModel) error {
+func (m MysqlDAO) DeleteServer(sModel *schema.ServerModel) error {
 	glog.Info(fmt.Sprintf("Deleting server: %s", sModel.ToString()))
 	db, err := m.openConn(); if err != nil {
 		return err
@@ -56,7 +56,7 @@ func (m *MysqlDAO) DeleteServer(sModel *schema.ServerModel) error {
 	}
 }
 
-func (m *MysqlDAO) CreateApp(aModel *schema.AppModel) error {
+func (m MysqlDAO) CreateApp(aModel *schema.AppModel) error {
 	glog.Info(fmt.Sprintf("Inserting new app: %s", aModel.ToString()))
 	db, err := m.openConn(); if err != nil {
 		return err
@@ -66,7 +66,7 @@ func (m *MysqlDAO) CreateApp(aModel *schema.AppModel) error {
 	}
 }
 
-func (m *MysqlDAO) GetApp(pred map[string]string) (*schema.AppModel, error) {
+func (m MysqlDAO) GetApp(pred map[string]string) (*schema.AppModel, error) {
 	glog.Info(fmt.Sprintf("Fetching app based on predicates: %s", pred))
 	db, err := m.openConn(); if err != nil {
 		return nil, err
@@ -82,7 +82,7 @@ func (m *MysqlDAO) GetApp(pred map[string]string) (*schema.AppModel, error) {
 	}
 }
 
-func (m *MysqlDAO) GetApps(pred map[string]string) ([]*schema.AppModel, error) {
+func (m MysqlDAO) GetApps(pred map[string]string) ([]*schema.AppModel, error) {
 	glog.Info(fmt.Sprintf("Finding all deployments for app based on predicates: %s", pred))
 	db, err := m.openConn(); if err != nil {
 		return nil, err
@@ -98,7 +98,7 @@ func (m *MysqlDAO) GetApps(pred map[string]string) ([]*schema.AppModel, error) {
 	}
 }
 
-func (m *MysqlDAO) GetDeployedServers(aModel []*schema.AppModel) ([]*schema.ServerModel, error) {
+func (m MysqlDAO) GetDeployedServers(aModel []*schema.AppModel) ([]*schema.ServerModel, error) {
 	glog.Info(fmt.Sprintf("Finding all deployments of apps"))
 	db, err := m.openConn(); if err != nil {
 		return nil, err
@@ -118,7 +118,7 @@ func (m *MysqlDAO) GetDeployedServers(aModel []*schema.AppModel) ([]*schema.Serv
 	}
 }
 
-func (m *MysqlDAO) DeleteApp(aModel *schema.AppModel) error {
+func (m MysqlDAO) DeleteApp(aModel *schema.AppModel) error {
 	glog.Info(fmt.Sprintf("Deleting app: %s", aModel.ToString()))
 	db, err := m.openConn(); if err != nil {
 		return err

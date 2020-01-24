@@ -15,7 +15,7 @@ type MasterServer struct
 	GrpcServerPort 	int
 }
 
-func (m *MasterServer) StartHttpServer () (bool, error) {
+func (m MasterServer) StartHttpServer () (bool, error) {
 	/*
 	Begins http server setup. This is used to service application requests via http api calls.
 
@@ -34,7 +34,7 @@ func (m *MasterServer) StartHttpServer () (bool, error) {
 	return true, nil
 }
 
-func (m *MasterServer) StartGrpcServer() (bool, error) {
+func (m MasterServer) StartGrpcServer() (bool, error) {
 	/*
 		Begins gRPC server setup. This is used to service application requests via Passage servers.
 
