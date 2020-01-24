@@ -16,20 +16,6 @@ type MysqlDAO struct {
 	password string
 }
 
-//func (m *MysqlDAO) execute(query string) (*sql.Rows, error) {
-//	/*
-//		Executes a given query statement.
-//	*/
-//	glog.Info("Executing query: ", query)
-//	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@/%s", m.user, m.password, dbSchema))
-//	if err != nil {return nil, err}
-//	defer db.Close()
-//
-//	if results, err := db.Query(query); err != nil {
-//		return nil, err
-//	} else {return results, err}
-//}
-
 func (m *MysqlDAO) openConn() (*gorm.DB, error) {
 	return gorm.Open("mysql", "passage:passage@(localhost)/Passage_master?charset=utf8&parseTime=True&loc=Local")
 }
@@ -46,7 +32,6 @@ func (m *MysqlDAO) CreateServer(sModel *schema.ServerModel) error {
 
 func (m *MysqlDAO) GetServer(pred map[string]string) (*schema.ServerModel, error) {
 	glog.Info(fmt.Sprintf("Fetching server information based on predicates: %s", pred))
-
 	db, err := m.openConn(); if err != nil {
 		return nil, err
 	} else {
@@ -63,7 +48,6 @@ func (m *MysqlDAO) GetServer(pred map[string]string) (*schema.ServerModel, error
 
 func (m *MysqlDAO) DeleteServer(sModel *schema.ServerModel) error {
 	glog.Info(fmt.Sprintf("Deleting server: %s", sModel.ToString()))
-
 	db, err := m.openConn(); if err != nil {
 		return err
 	} else {
@@ -72,33 +56,75 @@ func (m *MysqlDAO) DeleteServer(sModel *schema.ServerModel) error {
 	}
 }
 
-//func (m *MysqlDAO) InsertApp(serverID uint32, appName string) error {
-//	glog.Info(fmt.Sprintf("Inserting new app: %s to serverID: %d", serverID, appName))
-//	query := fmt.Sprintf("INSERT INTO %s.%s (serverID,name) VALUES (%s,%d)", dbSchema, appTbl, serverID, appName)
-//	if _, err := m.execute(query); err != nil {
-//		return err
-//	} else {return nil}
-//}
-//
-//func (m *MysqlDAO) GetApp(serverID uint32, appName string) (*AppModel, error) {
-//	glog.Info(fmt.Sprintf("Fetching app: %s from serverID: %d", appName, serverID))
-//	query := fmt.Sprintf("SELECT * FROM %s.%s WHERE serverID='%s' AND name='%s'", dbSchema, appTbl, appName, serverID)
-//	if row, err := m.execute(query); err != nil {
-//		return nil, err
-//	} else {
-//		var resp *AppModel
-//		row.Scan(resp)
-//		return resp, nil
-//	}
-//}
-//
-//func (m *MysqlDAO) GetApps(appName string) ([]*AppModel, error) {
-//	glog.Info(fmt.Sprintf("Finding all deployments for app: %s", appName))
-//	query :=
-//}
-//
-//func (m *MysqlDAO) DeleteApp(appID uint32) error {return nil}
-//
-//func NewMysqlDAO() error {
-//
-//}
+func (m *MysqlDAO) CreateApp(aModel *schema.AppModel) error {
+	glog.Info(fmt.Sprintf("Inserting new app: %s", aModel.ToString()))
+	db, err := m.openConn(); if err != nil {
+		return err
+	} else {
+		db.Create(aModel)
+		return nil
+	}
+}
+
+func (m *MysqlDAO) GetApp(pred map[string]string) (*schema.AppModel, error) {
+	glog.Info(fmt.Sprintf("Fetching app based on predicates: %s", pred))
+	db, err := m.openConn(); if err != nil {
+		return nil, err
+	} else {
+		appModel := &schema.AppModel{}
+		for eachCondition, conditionValue := range pred {
+			db = db.Where(fmt.Sprintf("%s = '%s'", eachCondition, conditionValue))
+		}
+		rec := db.Take(appModel)
+		if rec.RecordNotFound() {
+			return &schema.AppModel{}, nil
+		} else {return appModel, nil}
+	}
+}
+
+func (m *MysqlDAO) GetApps(pred map[string]string) ([]*schema.AppModel, error) {
+	glog.Info(fmt.Sprintf("Finding all deployments for app based on predicates: %s", pred))
+	db, err := m.openConn(); if err != nil {
+		return nil, err
+	} else {
+		appModel := make([]*schema.AppModel, 1)
+		for eachCondition, conditionValue := range pred {
+			db = db.Where(fmt.Sprintf("%s = '%s'", eachCondition, conditionValue))
+		}
+		rec := db.Find(&appModel)
+		if rec.RecordNotFound() {
+			return make([]*schema.AppModel, 0), nil
+		} else {return appModel, nil}
+	}
+}
+
+func (m *MysqlDAO) GetDeployedServers(aModel *schema.AppModel) ([]*schema.ServerModel, error) {
+	glog.Info(fmt.Sprintf("Finding all deployments of app: %s", aModel.ToString()))
+	db, err := m.openConn(); if err != nil {
+		return nil, err
+	} else {
+		srvModel := make([]*schema.ServerModel, 1)
+		apps, _ := m.GetApps(map[string]string{"id" : string(aModel.ID)})
+		for indx, eachApp := range apps {
+			if indx == 0 {
+				db = db.Where(fmt.Sprintf("%s = '%d'", "id", eachApp.DeployedServerUid))
+			} else {
+				db = db.Or(fmt.Sprintf("%s = '%d'", "id", eachApp.DeployedServerUid))
+			}
+		}
+		rec := db.Find(&srvModel)
+		if rec.RecordNotFound() {
+			return make([]*schema.ServerModel, 0), nil
+		} else {return srvModel, nil}
+	}
+}
+
+func (m *MysqlDAO) DeleteApp(aModel *schema.AppModel) error {
+	glog.Info(fmt.Sprintf("Deleting app: %s", aModel.ToString()))
+	db, err := m.openConn(); if err != nil {
+		return err
+	} else {
+		db.Unscoped().Where(fmt.Sprintf("id=%d", aModel.ID)).Delete(aModel)
+		return nil
+	}
+}

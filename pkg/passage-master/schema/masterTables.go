@@ -23,8 +23,7 @@ func (s ServerModel) ToString() string {
 type AppModel struct {
 	gorm.Model
 	Name string `gorm:"type:varchar(20); NOT NULL; unique_index:indx"`
-	Server ServerModel `gorm:"foreignkey:ServerModelID"`
-	ServerID uint
+	DeployedServerUid uint `gorm:"NOT NULL; unique_index:indx"`
 }
 
 func (a AppModel) TableName() string {
