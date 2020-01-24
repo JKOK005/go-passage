@@ -21,6 +21,11 @@ func (m AccessHandler) RegisterServer(serverUrl string, serverPort int) error {
 	return m.ModelDAO.CreateServer(srv)
 }
 
+func (m AccessHandler) SearchServer(serverUrl string, serverPort int) (*schema.ServerModel, error) {
+	glog.Info(fmt.Sprintf("Searching for server: %s:%d", serverUrl, serverPort))
+	return m.ModelDAO.GetServer(map[string]string{"url": serverUrl, "port": string(serverPort)})
+}
+
 func (m AccessHandler) RegisterApp(serverID int, appName string) error {
 	glog.Info(fmt.Sprintf("Register app: %s under server id: %d", appName, serverID))
 	app := &schema.AppModel{
