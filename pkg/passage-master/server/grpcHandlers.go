@@ -37,7 +37,16 @@ func (g grpcClient) AddServer(ctx context.Context, request *pb.AddServerRequest)
 			- pb.AddServerResponse: proto add server response
 			- error: Error when adding server
 	*/
-	return nil,nil
+	err := g.Handler.RegisterServer(request.ExposedUrl, int(request.ExposedPort)); if err != nil {return nil, err}
+
+	srv, err := g.Handler.SearchServer(request.ExposedUrl, int(request.ExposedPort)); if err != nil {
+		return nil, err
+	} else {
+		return &pb.AddServerResponse{
+			Resp:     true,
+			ServerID: uint32(srv.ID),
+		},nil
+	}
 }
 
 func (g grpcClient) RemoveServer(ctx context.Context, request *pb.RemoveServerRequest) (*pb.RemoveServerResponse, error) {
@@ -50,7 +59,8 @@ func (g grpcClient) RemoveServer(ctx context.Context, request *pb.RemoveServerRe
 			- pb.RemoveServerResponse: proto remove server response
 			- error: Error when adding server
 	*/
-	return nil,nil
+	err := g.Handler.DeleteServer(int(request.ServerID)); if err != nil {return nil, err}
+	return &pb.RemoveServerResponse{Resp: true},nil
 }
 
 func (g grpcClient) AddApplication(ctx context.Context, request *pb.AddAppRequest) (*pb.AddAppResponse, error) {
@@ -64,7 +74,8 @@ func (g grpcClient) AddApplication(ctx context.Context, request *pb.AddAppReques
 			- pb.AddAppResponse: proto add application response
 			- error: Error when adding server
 	*/
-	return nil,nil
+	err := g.Handler.RegisterApp(int(request.ServerID), request.AppName); if err != nil {return nil, err}
+	return &pb.AddAppResponse{Resp: true}, nil
 }
 
 func (g grpcClient) RemoveApplication(ctx context.Context, request *pb.RemoveAppRequest) (*pb.RemoveAppResponse, error) {
@@ -109,9 +120,7 @@ func (g grpcClient) GetAppAddress(ctx context.Context, request *pb.GetAppRequest
 
 func DispatchGrpcApiHandler() *grpc.Server {
 	grpcServer := grpc.NewServer()
-	pb.RegisterMasterServicesServer(grpcServer, &grpcClient{
-		Handler: handlers.AccessHandler{ModelDAO: dao.MysqlDAO{}}
-		},
-	)
+	dataObj := dao.MysqlDAO{}
+	pb.RegisterMasterServicesServer(grpcServer, &grpcClient{Handler: handlers.AccessHandler{ModelDAO: dataObj}})
 	return grpcServer
 }
