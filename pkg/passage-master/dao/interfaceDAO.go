@@ -9,5 +9,6 @@ type DAOInterface interface {
 	CreateApp(aModel *schema.AppModel) error
 	GetApp(pred map[string]string) (*schema.AppModel, error)
 	GetApps(pred map[string]string) ([]*schema.AppModel, error)
+	GetDeployedServers(aModel []*schema.AppModel) ([]*schema.ServerModel, error)
 	DeleteApp(aModel *schema.AppModel) error
 }
