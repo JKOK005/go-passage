@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"strconv"
 	"github.com/golang/glog"
 	_ "github.com/go-sql-driver/mysql"
 	"go-passage/pkg/passage-master/dao"
@@ -23,7 +24,7 @@ func (m AccessHandler) RegisterServer(serverUrl string, serverPort int) error {
 
 func (m AccessHandler) SearchServer(serverUrl string, serverPort int) (*schema.ServerModel, error) {
 	glog.Info(fmt.Sprintf("Searching for server: %s:%d", serverUrl, serverPort))
-	return m.ModelDAO.GetServer(map[string]string{"url": serverUrl, "port": string(serverPort)})
+	return m.ModelDAO.GetServer(map[string]string{"url": serverUrl, "port": strconv.Itoa(serverPort)})
 }
 
 func (m AccessHandler) RegisterApp(serverID int, appName string) error {
@@ -46,12 +47,12 @@ func (m AccessHandler) SearchApp(appName string) ([]*schema.ServerModel, error) 
 
 func (m AccessHandler) DeleteApp(serverID int, appName string) error {
 	glog.Info(fmt.Sprintf("Deleting app: %s under server id: %d", appName, serverID))
-	app, _ := m.ModelDAO.GetApp(map[string]string{"Name": appName, "DeployedServerUid": string(serverID)})
+	app, _ := m.ModelDAO.GetApp(map[string]string{"Name": appName, "DeployedServerUid": strconv.Itoa(serverID)})
 	return m.ModelDAO.DeleteApp(app)
 }
 
 func (m AccessHandler) DeleteServer(serverID int) error {
 	glog.Info(fmt.Sprintf("Deleting server id: %d", serverID))
-	srv, _ := m.ModelDAO.GetServer(map[string]string{"id": string(serverID)})
+	srv, _ := m.ModelDAO.GetServer(map[string]string{"id": strconv.Itoa(serverID)})
 	return m.ModelDAO.DeleteServer(srv)
 }
