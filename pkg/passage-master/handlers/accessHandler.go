@@ -47,7 +47,7 @@ func (m AccessHandler) SearchApp(appName string) ([]*schema.ServerModel, error) 
 
 func (m AccessHandler) DeleteApp(serverID int, appName string) error {
 	glog.Info(fmt.Sprintf("Deleting app: %s under server id: %d", appName, serverID))
-	app, _ := m.ModelDAO.GetApp(map[string]string{"Name": appName, "DeployedServerUid": strconv.Itoa(serverID)})
+	app, _ := m.ModelDAO.GetApp(map[string]string{"name": appName, "deployed_server_uid": strconv.Itoa(serverID)})
 	return m.ModelDAO.DeleteApp(app)
 }
 
