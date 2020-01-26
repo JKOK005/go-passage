@@ -88,7 +88,8 @@ func (g grpcClient) RemoveApplication(ctx context.Context, request *pb.RemoveApp
 			- pb.AddAppResponse: proto add application response
 			- error: Error when adding server
 	*/
-	return nil,nil
+	err := g.Handler.DeleteApp(int(request.ServerID), request.AppName); if err != nil {return nil, err}
+	return &pb.RemoveAppResponse{Resp: true}, nil
 }
 
 func (g grpcClient) CheckServeIsAlive(ctx context.Context, empty *empty.Empty) (*pb.HeartbeatResponse, error) {
@@ -115,7 +116,21 @@ func (g grpcClient) GetAppAddress(ctx context.Context, request *pb.GetAppRequest
 			- pb.GetAppResponse: If application exists, return the message type GetAppResponse, else return nothing
 			- error: Error when attempting to retrieve application
 	*/
-	return nil,nil
+	hostServers, err := g.Handler.SearchApp(request.AppName); if err != nil {
+		return nil, err
+	} else {
+		var response []*pb.GetAppResponse_SrvAddr
+		for _, srv := range hostServers {
+			response = append(response, &pb.GetAppResponse_SrvAddr{
+				ServerUrl: srv.Url,
+				ServerPort: uint32(srv.Port),
+			})
+		}
+		return &pb.GetAppResponse{
+			AppName: request.AppName,
+			SrvAddr: response,
+		}, nil
+	}
 }
 
 func DispatchGrpcApiHandler() *grpc.Server {

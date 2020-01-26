@@ -39,7 +39,8 @@ message AddAppResponse {
 }
 
 message RemoveAppRequest {
-    uint32 appID = 1;
+    uint32 serverID = 1;
+    string appName = 2;  // Constraint to unique (serverID, appName) pair
 }
 
 message RemoveAppResponse {
@@ -51,12 +52,12 @@ message GetAppRequest {
 }
 
 message GetAppResponse {
-    message AppAddr {
-        string appName = 2;
+    message SrvAddr {
         string serverUrl = 3;
         uint32 serverPort = 4;
     }
-    repeated AppAddr appAddr = 1;
+    string appName = 1;
+    repeated SrvAddr srvAddr = 2;
 }
 
 service MasterServices {
