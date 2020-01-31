@@ -7,18 +7,6 @@ import (
 
 type serverGrpcClient struct {}
 
-func (s serverGrpcClient) HeartbeatMaster() {
-	/*
-		Renews server heartbeat with the master
-	*/
-}
-
-func (s serverGrpcClient) HeartbeatClient() {
-	/*
-		Ensures that the client is up-to-date via heart beating its proxy
-	*/
-}
-
 func (s serverGrpcClient) AddClient() {
 	/*
 		Registers a new client proxy connected to the server.

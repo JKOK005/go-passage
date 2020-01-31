@@ -1,5 +1,8 @@
-package main
+package handlers
 
-func main() {
-	
+type ModelHandlerServer struct {
+
 }
+
+func (m ModelHandlerServer) GetRegisteredApps() {}
+
