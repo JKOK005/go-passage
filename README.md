@@ -7,7 +7,12 @@ Passage is designed to facilitate efficient message passing between multiple app
 ## Protobuf
 Compile and generate Protobuf libraries for master
 ```proto
-protoc -I api/protobuf-spec/proto/master --go_out=plugins=grpc:api/protobuf-spec/bin/master/ api/protobuf-spec/proto/master/*.proto
+protoc -I api/protobuf-spec/proto/ --go_out=plugins=grpc:api/protobuf-spec/bin/ api/protobuf-spec/proto/master/*.proto
+```
+
+Compile and generate Protobuf libraries for server
+```proto
+protoc -I api/protobuf-spec/proto/ --go_out=plugins=grpc:api/protobuf-spec/bin/ api/protobuf-spec/proto/server/*.proto
 ```
 
 ## Dependencies
