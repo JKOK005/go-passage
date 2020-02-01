@@ -1,21 +1,34 @@
 syntax = "proto3";
 package server;
 
-import "google/protobuf/empty.proto";
+import "master/messages.proto";
+
+message ClientAddServerRequest {
+    master.AddServerRequest req = 1;
+}
+
+message ClientAddServerResponse {
+    master.AddServerResponse resp = 1;
+}
+
+message ClientAddAppRequest {
+    master.AddAppRequest req = 1;
+}
+
+message ClientAddAppResponse {
+    master.AddAppResponse resp = 2;
+}
 
 message ClientSearchAppRequest {
-    string appName = 1;
+    master.GetAppRequest req = 1;
 }
 
 message ClientSearchAppResponse {
-    bool isPresent = 1;
-    string appName = 2;
-    string serverUrl = 3;
-    uint32 serverPort = 4;
+    master.GetAppResponse resp = 2;
 }
 
 message ClientPayloadRequest {
-    string receiver = 1;
+    string receiverApp = 1;
     bytes payload = 2;
 }
 
@@ -31,4 +44,11 @@ message DispatchPayloadRequest {
 
 message DispatchPayloadResponse {
     bool resp = 1;
+}
+
+service ServerServices {
+    rpc AddServer(ClientAddServerRequest) returns (ClientAddServerResponse);
+    rpc AddApp(ClientAddAppRequest) returns (ClientAddAppResponse);
+    rpc SearchApp(ClientSearchAppRequest) returns (ClientSearchAppResponse);
+    rpc DispatchPayload(ClientPayloadRequest) returns (ClientPayloadResponse);
 }
